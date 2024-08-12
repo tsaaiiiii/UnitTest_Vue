@@ -1,29 +1,45 @@
 import { describe, it, expect } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
-import WelcomeItem from '@/components/WelcomeItem.vue'
+import { mount } from '@vue/test-utils'
+import WelcomeItem from '../WelcomeItem.vue'
 
-describe('WelcomeItem', () => {
-  it('renders the welcome message correctly', () => {
-    const wrapper = shallowMount(WelcomeItem, {
-      propsData: {
-        name: 'John'
+describe('WelcomeItem.vue', () => {
+  it('renders default slot content', () => {
+    const wrapper = mount(WelcomeItem, {
+      slots: {
+        default: '<p>Welcome to our application!</p>'
       }
     })
-
-    expect(wrapper.text()).toContain('Welcome, John!')
+    expect(wrapper.text()).toContain('Welcome to our application!')
   })
 
-  it('displays a default welcome message if no name is provided', () => {
-    const wrapper = shallowMount(WelcomeItem)
-
-    expect(wrapper.text()).toContain('Welcome!')
+  it('renders heading slot content', () => {
+    const wrapper = mount(WelcomeItem, {
+      slots: {
+        heading: '<span>Getting Started</span>'
+      }
+    })
+    expect(wrapper.html()).toContain('<span>Getting Started</span>')
   })
 
-  it('emits a custom event when the welcome button is clicked', () => {
-    const wrapper = shallowMount(WelcomeItem)
+  it('renders icon slot content', () => {
+    const wrapper = mount(WelcomeItem, {
+      slots: {
+        icon: '<svg class="icon"></svg>'
+      }
+    })
+    expect(wrapper.find('i').html()).toContain('<svg class="icon"></svg>')
+  })
 
-    wrapper.find('button').trigger('click')
-
-    expect(wrapper.emitted('welcome-clicked')).toBeTruthy()
+  it('renders all slots together', () => {
+    const wrapper = mount(WelcomeItem, {
+      slots: {
+        icon: '<svg class="icon"></svg>',
+        heading: '<span>Getting Started</span>',
+        default: '<p>Welcome to our application!</p>'
+      }
+    })
+    expect(wrapper.html()).toContain('<svg class="icon"></svg>')
+    expect(wrapper.html()).toContain('<span>Getting Started</span>')
+    expect(wrapper.text()).toContain('Welcome to our application!')
   })
 })
