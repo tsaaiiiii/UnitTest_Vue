@@ -4,13 +4,29 @@
   </div>
   <Button class="increaseButton" @click="increment">ADD!!!</Button>
   <Button class="decreaseButton" @click="decrement">ADD!!!</Button>
-  <p>{{ count }}</p>
+  <p class="count">{{ count }}</p>
+  <div class="generic">
+    <GenericTable :items="users" />
+  </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useCounter } from '@/composables/useCounter'
+import GenericTable from '@/components/GenericTable.vue'
 
 const { count, increment, decrement } = useCounter()
+
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+const users = ref<User[]>([
+  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 2, name: 'Bob', email: 'bob@example.com' }
+])
 </script>
 
 <style>
@@ -49,5 +65,19 @@ p {
   font-size: 30px;
   margin-top: 20px;
   text-align: center;
+}
+
+.count {
+  color: blue;
+  font-size: 30px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.generic {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
